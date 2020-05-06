@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-// FileExists checks if a file exists
-func FileExists(name string) bool {
+// PathExists checks if a file exists
+func PathExists(name string) bool {
 	if _, err := os.Stat(name); err != nil {
 		if os.IsNotExist(err) {
 			return false

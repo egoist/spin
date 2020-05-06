@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/egoist/spin/utils"
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -13,7 +15,7 @@ func main() {
 
 	kingpin.Parse()
 
-	if utils.FileExists(*target) {
+	if utils.PathExists(*target) {
 		isEmpty, _ := utils.IsEmpty(*target)
 		if !isEmpty {
 			fmt.Println("Output directory already exists and is not empty")
@@ -21,15 +23,27 @@ func main() {
 		}
 	}
 
-	url := fmt.Sprintf("https://github.com/%s/archive/master/archive.zip", *repo)
+	homedir, _ := os.UserHomeDir()
+	cacheDir := filepath.Join(homedir, fmt.Sprintf(".spin/templates/github/%s", *repo))
 
-	outFile, err := utils.DownloadFile(url)
+	if !utils.PathExists(cacheDir) {
+		url := fmt.Sprintf("https://github.com/%s/archive/master/archive.zip", *repo)
 
-	if err != nil {
-		fmt.Println("error", err)
-	} else {
-		fmt.Printf("Creating new project in %s\n", *target)
-		utils.Unzip(outFile.Name(), *target)
-		fmt.Println("Success!")
+		zipFile, err := utils.DownloadFile(url)
+
+		if err != nil {
+			fmt.Println("error", err)
+			return
+		}
+
+		utils.Unzip(zipFile.Name(), cacheDir)
 	}
+
+	if err := utils.Copy(cacheDir, *target); err != nil {
+		fmt.Println("error", err)
+		return
+	}
+
+	fmt.Printf("Creating new project in %s\n", *target)
+	fmt.Println("Success!")
 }
