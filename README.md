@@ -22,6 +22,14 @@ Or [download a binary manually](https://github.com/egoist/spin/releases).
 spin user/repo new-project
 ```
 
+### Private Repository
+
+Use `--clone` which uses `git clone` under the clone to download your repository:
+
+```bash
+spin user/private-repo new-project --clone
+```
+
 ## License
 
 MIT &copy; [EGOIST (Kevin Titor)](https://egoist.sh)
