@@ -30,10 +30,13 @@ const (
 	Skip
 )
 
+// CopyOption define a function type that handle optional actions.
+type CopyOption func(*Options)
+
 // getDefaultOptions provides default options,
 // which would be modified by usage-side.
-func getDefaultOptions() Options {
-	return Options{
+func getDefaultOptions() *Options {
+	return &Options{
 		OnSymlink: func(string) SymlinkAction {
 			return Shallow // Do shallow copy
 		},
