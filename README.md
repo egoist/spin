@@ -24,7 +24,7 @@ spin user/repo new-project
 
 ### Private Repository
 
-Use `--clone` which uses `git clone` under the clone to download your repository:
+Use `--clone` which uses `git clone` under the hood to download your repository:
 
 ```bash
 spin user/private-repo new-project --clone
