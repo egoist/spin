@@ -13,6 +13,7 @@ func main() {
 	repo := kingpin.Arg("repo", "Repository slug").Required().String()
 	target := kingpin.Arg("out-dir", "Output directory").Default(".").String()
 	clone := kingpin.Flag("clone", "Clone repository").Bool()
+	update := kingpin.Flag("update", "Update cached repository").Short('u').Bool()
 
 	kingpin.Parse()
 
@@ -27,7 +28,7 @@ func main() {
 	homedir, _ := os.UserHomeDir()
 	cacheDir := filepath.Join(homedir, fmt.Sprintf(".spin/templates/github/%s", *repo))
 
-	if !utils.PathExists(cacheDir) {
+	if !utils.PathExists(cacheDir) || *update {
 		if *clone == true {
 			if err := utils.GitClone(*repo, cacheDir); err != nil {
 				fmt.Println("error", err)
@@ -36,6 +37,7 @@ func main() {
 		} else {
 			url := fmt.Sprintf("https://github.com/%s/archive/master/archive.zip", *repo)
 
+			fmt.Println("Downloading..")
 			zipFile, err := utils.DownloadFile(url)
 
 			if err != nil {
