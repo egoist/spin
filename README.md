@@ -30,6 +30,14 @@ Use `--clone` which uses `git clone` under the hood to download your repository:
 spin user/private-repo new-project --clone
 ```
 
+### Update Cached Repository
+
+Spin will cache the repository after first run, you can use `-u, --update` to update it:
+
+```bash
+spin owner/repo new-project --update
+```
+
 ## License
 
 MIT &copy; [EGOIST (Kevin Titor)](https://egoist.sh)
